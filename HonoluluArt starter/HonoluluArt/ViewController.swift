@@ -48,6 +48,8 @@ class ViewController: UIViewController {
                               discipline: "Sculpture",
                               coordinate: CLLocationCoordinate2D(latitude: 21.283921, longitude: -157.831661))
         mapView.addAnnotation(artwork)
+        
+        mapView.delegate = self //
   }
     
     let regionRadius: CLLocationDistance = 1000 // NS -> EW span of 1000 meters rectangle
@@ -58,11 +60,34 @@ class ViewController: UIViewController {
         // mapview then autotransitions map current view to that region
         mapView.setRegion(coordinateRegion, animated: true)
     }
-    
-    
-    extension ViewCOntroller: MKMapViewDelegate {
-        func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) ->
-    }
 
 }
 
+
+// this uses a new ios 11 feature to show info bubble on click of a map view
+extension ViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard let annotation = annotation as? Artwork else { return nil }
+        let identifier = "marker"
+        
+        
+        if #available(iOS 11.0, *) {
+            var view: MKMarkerAnnotationView
+            if let dequeuedView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKMarkerAnnotationView {
+                dequeuedView.annotation = annotation
+                view = dequeuedView
+            } else {
+                view = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                view.canShowCallout = true
+                view.calloutOffset = CGPoint(x: -5, y: 5)
+                view.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            }
+            
+            return view;
+        } else {
+            // Fallback on earlier versions
+            return nil;
+        }
+        
+    }
+}
