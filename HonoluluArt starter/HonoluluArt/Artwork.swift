@@ -8,6 +8,7 @@
 
 import Foundation
 import MapKit
+import Contacts
 
 
 // an object blueprint for a new map location that talks about art in Honolulu
@@ -31,4 +32,15 @@ class Artwork: NSObject, MKAnnotation {
     var subtitle: String? {
         return locationName
     }
+    
+    
+    func mapItem() -> MKMapItem {
+        let addressDict = [CNPostalAddressStreetKey: subtitle!]
+        let placemark = MKPlacemark(coordinate: coordinate, addressDictionary: addressDict)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = title
+        return mapItem
+    }
+    
+    
 }
