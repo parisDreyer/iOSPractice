@@ -1,0 +1,3 @@
+rootProject.name = 'locationTrackingReactNative'
+
+include ':app'
