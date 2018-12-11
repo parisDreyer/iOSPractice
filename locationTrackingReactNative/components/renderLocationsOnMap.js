@@ -38,6 +38,7 @@ const renderDistanceTravelled = ({distance, styles}) => (
 );
 
 
+
 module.exports = { 
     renderLocations,
     renderDistanceTravelled

@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import { // react components for native view display+ui
-  Platform, Text, View,
-  TouchableOpacity
+  Platform, View
 } from 'react-native';
 import MapView, { Marker, AnimatedRegion, Polyline } from "react-native-maps";
-import haversine from "haversine";
 import styles from './css/styles'; // css json
 import { // helper to display info about stuff on the map
   renderLocations,
   renderDistanceTravelled
 } from './components/renderLocationsOnMap';
+import {
+  calcDistance, // used in componentDidMount() to calc distance user has travelled
+  tspDijkstras // travelling salesperson dijksra's greedy solution
+} from "./components/travellingSalespersonGPS";
 
 
 const LATITUDE = 29.95539;
@@ -71,39 +73,95 @@ class AnimatedMarkers extends React.Component {
 
         this.setState({
           latitude,
-          longituderouteCoordinates: routeCoordinates.concat([newCoordinate]),
-          distanceTravelled:
-            distanceTravelled + this.calcDistance(newCoordinate),
+          longitude,
+          routeCoordinates: routeCoordinates.concat([newCoordinate]),
+          distanceTravelled: distanceTravelled + calcDistance(newCoordinate, this.state.prevLatLng),
           prevLatLng: newCoordinate
         });
       },
-      error => console.log(error),
+      error => error,//console.log(error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }
+
 
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
+  // helper for handle press
+   dupCoord = (coord) => ({
+      coordinate: coord['coordinate'],
+      latitude: coord['latitude'],
+      longitude: coord['longitude'],
+      cost: coord['cost']
+    });
+  // helper for handle press
+  dupCoordinates = (coordinates) => coordinates.map(coord => this.dupCoord(coord))
+  
   handlePress(e) {
     let lngth = this.state.markers.length + 1;
-    this.setState({
-      markers: [
-        ...this.state.markers,
-        {
-          key: `marker_${lngth}`,
-          coordinate: e.nativeEvent.coordinate,
-          cost: `${0}`
-        }
-      ]
-    });
-  }
 
-  calcDistance = newLatLng => {
-    const { prevLatLng } = this.state;
-    return haversine(prevLatLng, newLatLng) || 0;
-  };
+    // lat and long required as separate datums for react-native-maps polyline component
+    
+    const new_coord = e.nativeEvent.coordinate;
+    const latitude = new_coord['latitude'];
+    const longitude = new_coord['longitude'];
+    // the new coordinate from the user click
+    let start_coord = { 
+      key: `marker_${lngth}_${Date.now()}`, 
+      coordinate: {latitude, longitude },//e.nativeEvent.coordinate,
+      latitude: latitude,
+      longitude: longitude,
+      cost: `${0}` };
+      // the new array of coordinates with the new coordinate
+      let newMarkers = this.dupCoordinates(this.state.markers);
+      newMarkers.push(start_coord);
+
+      
+    // a hash of coordinates (e.g. a graph) to do travelling-salesperson route sorting on
+    let coordinate_nodes = {};
+    let all_data = {};
+
+    let i = 0;
+    while(i < newMarkers.length){
+      coordinate_nodes[i] = newMarkers[i]['coordinate'];
+      all_data[i] = newMarkers[i];
+      i++;
+    }
+
+
+    
+    // use travelling-salesperson solution to find good route to reach all coordinates
+    let ideal_route = tspDijkstras(coordinate_nodes, i - 1)
+
+    // reorder the this.state.markers coordinates array to show the ideal route
+    // this markers array will then have polylines drawn in the order of the array
+
+    console.log("ideal route:::::::::::", JSON.stringify(ideal_route));
+    let ordered_markers = []
+    for(let j = 0; j < ideal_route.length; ++j){
+      let nxt = all_data[ideal_route[j]];
+
+      ordered_markers.push({
+        key: `marker_${j + 1}`,
+        coordinate: nxt.coordinate,
+        latitude: nxt.latitude,
+        longitude: nxt.longitude,
+        cost: `${0}`
+      });
+    }
+    console.log("----------------THE COORDS----------------");
+    console.log("-----------------------------------");
+    console.log("coord!", JSON.stringify(ordered_markers)); // just so i can see for debuggin
+    console.log("-----------------------------------");
+    console.log("----------------THE COORDS----------------");
+    // finally update the new state for the ordered markers to draw
+    // polylines from
+    this.setState({ markers: ordered_markers });
+
+
+  }
 
   getMapRegion = () => ({
     latitude: this.state.latitude,
@@ -138,6 +196,7 @@ class AnimatedMarkers extends React.Component {
           {this.currentPositionMarker()}
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
           {renderLocations({ locations: this.state.markers, styles: styles })}
+          <Polyline coordinates={this.state.markers} strokeWidth={4}/>
         </MapView>
         {renderDistanceTravelled({ distance: this.state.distanceTravelled, styles: styles})}
       </View>
