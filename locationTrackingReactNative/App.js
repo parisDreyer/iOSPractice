@@ -35,6 +35,7 @@ class AnimatedMarkers extends React.Component {
       })
     };
     this.handlePress = this.handlePress.bind(this);
+    this.deleteCoord = this.deleteCoord.bind(this);
   }
 
   componentWillMount() {
@@ -89,6 +90,16 @@ class AnimatedMarkers extends React.Component {
     navigator.geolocation.clearWatch(this.watchID);
   }
 
+  deleteCoord(id) {
+    let newMarks = [];
+    for(let i = 0; i < this.state.markers.length; ++i){
+      if(i != id) newMarks.push(this.state.markers[i]);
+    }
+    this.setState({
+      markers: newMarks
+    });
+  }
+
   // helper for handle press
    dupCoord = (coord) => ({
       coordinate: coord['coordinate'],
@@ -103,7 +114,6 @@ class AnimatedMarkers extends React.Component {
     let lngth = this.state.markers.length + 1;
 
     // lat and long required as separate datums for react-native-maps polyline component
-    
     const new_coord = e.nativeEvent.coordinate;
     const latitude = new_coord['latitude'];
     const longitude = new_coord['longitude'];
@@ -130,15 +140,12 @@ class AnimatedMarkers extends React.Component {
       i++;
     }
 
-
-    
     // use travelling-salesperson solution to find good route to reach all coordinates
     let ideal_route = tspDijkstras(coordinate_nodes, i - 1)
 
     // reorder the this.state.markers coordinates array to show the ideal route
     // this markers array will then have polylines drawn in the order of the array
 
-    console.log("ideal route:::::::::::", JSON.stringify(ideal_route));
     let ordered_markers = []
     for(let j = 0; j < ideal_route.length; ++j){
       let nxt = all_data[ideal_route[j]];
@@ -151,11 +158,6 @@ class AnimatedMarkers extends React.Component {
         cost: `${0}`
       });
     }
-    console.log("----------------THE COORDS----------------");
-    console.log("-----------------------------------");
-    console.log("coord!", JSON.stringify(ordered_markers)); // just so i can see for debuggin
-    console.log("-----------------------------------");
-    console.log("----------------THE COORDS----------------");
     // finally update the new state for the ordered markers to draw
     // polylines from
     this.setState({ markers: ordered_markers });
@@ -183,24 +185,20 @@ class AnimatedMarkers extends React.Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          showsUserLocation
-          followsUserLocation
-          loadingEnabled
-          region={this.getMapRegion()}
-          onPress={this.handlePress}
-        >
+    return <View style={styles.container}>
+        <MapView style={styles.map} showsUserLocation followsUserLocation loadingEnabled region={this.getMapRegion()} onPress={this.handlePress}>
           {this.currentPositionMarker()}
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
-          {renderLocations({ locations: this.state.markers, styles: styles })}
-          <Polyline coordinates={this.state.markers} strokeWidth={4}/>
+          {renderLocations({
+            locations: this.state.markers,
+            deleteButtonAction: id => this.deleteCoord(id)
+          })}
+          <Polyline coordinates={this.state.markers} strokeWidth={4} />
         </MapView>
-        {renderDistanceTravelled({ distance: this.state.distanceTravelled, styles: styles})}
-      </View>
-    );
+        {renderDistanceTravelled({
+          distance: this.state.distanceTravelled
+        })}
+      </View>;
   }
 }
 
