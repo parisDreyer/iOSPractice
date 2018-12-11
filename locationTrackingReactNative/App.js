@@ -186,7 +186,7 @@ class AnimatedMarkers extends React.Component {
 
   render() {
     return <View style={styles.container}>
-        <MapView style={styles.map} showsUserLocation followsUserLocation loadingEnabled region={this.getMapRegion()} onPress={this.handlePress}>
+        <MapView style={styles.map} showsUserLocation followsUserLocation loadingEnabled region={this.getMapRegion()} onLongPress={this.handlePress}>
           {this.currentPositionMarker()}
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
           {renderLocations({
