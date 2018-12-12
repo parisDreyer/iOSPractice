@@ -33,7 +33,10 @@ class AnimatedMarkers extends React.Component {
       coordinate: new AnimatedRegion({
         latitude: LATITUDE,
         longitude: LONGITUDE
-      })
+      }),
+
+      // the actual markers that will be rendered
+      thaMarkersToRender: []
     };
     this.handlePress = this.handlePress.bind(this);
     this.deleteCoord = this.deleteCoord.bind(this);
@@ -176,10 +179,31 @@ class AnimatedMarkers extends React.Component {
 
     // finally update the new state for the ordered markers to draw
     // polylines from
+    this.set_coordinates_array(ordered_markers).then(() => this.refreshMarkers());
+  }
+  
+  
+  // sets the coordinate values that will then be rendered as markers
+  async set_coordinates_array(ordered_coordinates){
+    this.setState({ markers: ordered_coordinates });
 
-    this.setState({ markers: ordered_markers });
   }
 
+  // resets the state of the marker objects that will be rendered in this class's render function
+  refreshMarkers = () =>
+    this.renderMarkers().then(() => {
+      this.forceUpdate();
+    });
+  
+
+  async renderMarkers() {
+    this.setState({thaMarkersToRender: 
+      renderLocations({
+        locations: this.state.markers,
+        deleteButtonAction: id => this.deleteCoord(id)
+      })
+    });
+  }
 
 
   getMapRegion = () => ({
@@ -206,10 +230,7 @@ class AnimatedMarkers extends React.Component {
         <MapView style={styles.map} showsUserLocation followsUserLocation loadingEnabled region={this.getMapRegion()} onLongPress={this.handlePress}>
           {this.currentPositionMarker()}
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
-          {renderLocations({
-            locations: this.state.markers,
-            deleteButtonAction: id => this.deleteCoord(id)
-          })}
+          {this.state.thaMarkersToRender}
           <Polyline coordinates={this.state.markers} strokeWidth={4} />
         </MapView>
         {renderDistanceTravelled({
