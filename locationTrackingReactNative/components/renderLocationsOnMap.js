@@ -5,7 +5,6 @@
         renderDistanceTravelled() - it renders info about {distance} travelled with {styles} css styling
 */
 
-
 import React from 'react';
 import styles from '../css/styles'; // css json
 import { // react components for native view display+ui
@@ -17,17 +16,16 @@ import { Marker } from "react-native-maps";
 
 const renderButton = ({ name, onPressButton }) => (
     <TouchableOpacity onPress={onPressButton}>
-        <Text style={styles.text}>
-            {name}
-        </Text>
+        <Text style={styles.text}>{name}</Text>
     </TouchableOpacity>
 );
 
 class Waypoint extends React.Component {
     constructor(props){
         super(props);
-        const { id, marker, deleteButtonAction } = this.props;
 
+        const { id, marker, deleteButtonAction } = this.props;
+        console.log('tha id: ', id)
         this.state = {
             isShowingInfoButtons: false
         };
@@ -38,8 +36,8 @@ class Waypoint extends React.Component {
         this.toggleInfoButtons = this.toggleInfoButtons.bind(this);
     }
     toggleInfoButtons(e){
-        if (e.stopPropagation) e.stopPropagation();
-        if (e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation();
+        if (!!e.stopPropagation) e.stopPropagation();
+        if (!!e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation();
         let isShowing = this.state.isShowingInfoButtons;
         this.setState({
             isShowingInfoButtons: !isShowing
@@ -55,13 +53,16 @@ class Waypoint extends React.Component {
     }
 
     render(){
+        // {...this.marker} 
         return <Marker 
-                    {...this.marker} 
-                    onPress={this.toggleInfoButtons}>
-            <View style={styles.marker}>
-              <Text style={styles.text}>{this.marker.cost}</Text>
-              {this.infoButtons()}
-            </View>
+                    key={this.id}
+                    coordinate={this.marker.coordinate}
+                    onPress={this.toggleInfoButtons}
+                >
+                <View style={styles.marker}>
+                <Text style={styles.text}>{this.marker.cost}</Text>
+                {this.infoButtons()}
+                </View>
           </Marker>;
     }
 }

@@ -10,7 +10,8 @@ import { // helper to display info about stuff on the map
 } from './components/renderLocationsOnMap';
 import {
   calcDistance, // used in componentDidMount() to calc distance user has travelled
-  tspDijkstras // travelling salesperson dijksra's greedy solution
+  tspDijkstras, // travelling salesperson dijksra's greedy solution
+  shuffle       // helper to shuffle an array
 } from "./components/travellingSalespersonGPS";
 
 
@@ -93,16 +94,23 @@ class AnimatedMarkers extends React.Component {
   deleteCoord(id) {
     let newMarks = [];
     for(let i = 0; i < this.state.markers.length; ++i){
-      if(i != id) newMarks.push(this.state.markers[i]);
+      if(this.state.markers[i].id != id) {
+        newMarks.push(this.state.markers[i]);
+      } else console.log(`delete ${id}: `, JSON.stringify(this.state.markers[i]));
     }
-    this.setState({
-      markers: newMarks
-    });
+
+
+
+    this.setState({ markers: newMarks },
+      () => this.reroute(shuffle(this.dupCoordinates(this.state.markers)))
+    );
+
   }
 
   // helper for handle press
    dupCoord = (coord) => ({
       coordinate: coord['coordinate'],
+      id: coord['id'],
       latitude: coord['latitude'],
       longitude: coord['longitude'],
       cost: coord['cost']
@@ -121,6 +129,7 @@ class AnimatedMarkers extends React.Component {
     let start_coord = { 
       key: `marker_${lngth}_${Date.now()}`, 
       coordinate: {latitude, longitude },//e.nativeEvent.coordinate,
+      id: lngth - 1,
       latitude: latitude,
       longitude: longitude,
       cost: `${0}` };
@@ -128,13 +137,18 @@ class AnimatedMarkers extends React.Component {
       let newMarkers = this.dupCoordinates(this.state.markers);
       newMarkers.push(start_coord);
 
-      
+      this.reroute(newMarkers);
+  }
+
+  // sets state with new route for the coordinates set by 
+  // user input in the newMarkers array of coordinate objects
+  reroute(newMarkers) {
     // a hash of coordinates (e.g. a graph) to do travelling-salesperson route sorting on
     let coordinate_nodes = {};
     let all_data = {};
 
     let i = 0;
-    while(i < newMarkers.length){
+    while (i < newMarkers.length) {
       coordinate_nodes[i] = newMarkers[i]['coordinate'];
       all_data[i] = newMarkers[i];
       i++;
@@ -147,23 +161,26 @@ class AnimatedMarkers extends React.Component {
     // this markers array will then have polylines drawn in the order of the array
 
     let ordered_markers = []
-    for(let j = 0; j < ideal_route.length; ++j){
+    for (let j = 0; j < ideal_route.length; ++j) {
       let nxt = all_data[ideal_route[j]];
-
       ordered_markers.push({
         key: `marker_${j + 1}`,
+        title: `m${j + 1}`,
+        id: j,
         coordinate: nxt.coordinate,
         latitude: nxt.latitude,
         longitude: nxt.longitude,
         cost: `${0}`
       });
     }
+
     // finally update the new state for the ordered markers to draw
     // polylines from
+
     this.setState({ markers: ordered_markers });
-
-
   }
+
+
 
   getMapRegion = () => ({
     latitude: this.state.latitude,
