@@ -11,7 +11,7 @@ import { // react components for native view display+ui
     Text, View,
     TouchableOpacity
 } from 'react-native';
-import { Marker } from "react-native-maps";
+import { Marker, Callout } from "react-native-maps";
 
 
 const renderButton = ({ name, onPressButton }) => (
@@ -39,34 +39,47 @@ class Waypoint extends React.Component {
         if (!!e.stopPropagation) e.stopPropagation();
         if (!!e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation();
         let isShowing = this.state.isShowingInfoButtons;
+
+        if(isShowing){
+            this.deleteButton();
+        }
+
+
         this.setState({
             isShowingInfoButtons: !isShowing
         });
     }
 
-    infoButtons(){
-        return this.state.isShowingInfoButtons ? (
-                renderButton({
-                    name: 'delete', 
-                    onPressButton: this.deleteButton})
-        ) : null;
-    }
+    // infoButtons(){
+    //     return this.state.isShowingInfoButtons ? (
+    //             renderButton({
+    //                 name: 'delete', 
+    //                 onPressButton: this.deleteButton})
+    //     ) : null;
+    // }
 
     render(){
         // {...this.marker} 
+        // let info = this.infoButtons();
+        // const content = info ? info : <Text style={styles.text}>{this.marker.cost}</Text>;
+        const content = this.state.isShowingInfoButtons ? "delete" : this.marker.cost;
         return <Marker 
-                    key={this.id}
-                    coordinate={this.marker.coordinate}
-                    onPress={this.toggleInfoButtons}
-                >
-                <View style={styles.marker}>
-                <Text style={styles.text}>{this.marker.cost}</Text>
-                {this.infoButtons()}
-                </View>
-          </Marker>;
+            key={this.id} 
+            coordinate={this.marker.coordinate}
+            style={styles.marker}
+            title={content}
+            onCalloutPress={this.toggleInfoButtons}>
+                <Callout>
+                    <View>
+                        <Text>{content}</Text>
+                    </View>
+                </Callout>
+            </Marker>;
     }
 }
 
+{/* </Marker>; */}
+{/*  <View style={styles.marker}>{content}</View> */}
 const renderLocations = ({ locations, deleteButtonAction }) =>
   locations.map((marker, id) => (
     <Waypoint

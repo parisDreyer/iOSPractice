@@ -182,20 +182,22 @@ class AnimatedMarkers extends React.Component {
     this.set_coordinates_array(ordered_markers).then(() => this.refreshMarkers());
   }
   
-  
+  // helper for this.reroute
   // sets the coordinate values that will then be rendered as markers
   async set_coordinates_array(ordered_coordinates){
     this.setState({ markers: ordered_coordinates });
 
   }
 
+  // helper for this.reroute
   // resets the state of the marker objects that will be rendered in this class's render function
   refreshMarkers = () =>
     this.renderMarkers().then(() => {
       this.forceUpdate();
     });
   
-
+  
+    // helper for refreshMarkers
   async renderMarkers() {
     this.setState({thaMarkersToRender: 
       renderLocations({
