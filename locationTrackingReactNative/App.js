@@ -192,18 +192,17 @@ class AnimatedMarkers extends React.Component {
   // helper for this.reroute
   // resets the state of the marker objects that will be rendered in this class's render function
   refreshMarkers = () =>
-    this.renderMarkers().then(() => {
-      this.forceUpdate();
-    });
+    this.renderMarkers().then(() => this.forceUpdate());
   
   
     // helper for refreshMarkers
   async renderMarkers() {
-    this.setState({thaMarkersToRender: 
-      renderLocations({
-        locations: this.state.markers,
-        deleteButtonAction: id => this.deleteCoord(id)
-      })
+    let the_locations = renderLocations({
+      locations: this.state.markers,
+      deleteButtonAction: id => this.deleteCoord(id)
+    })
+    this.setState({
+      thaMarkersToRender: the_locations
     });
   }
 
@@ -229,7 +228,15 @@ class AnimatedMarkers extends React.Component {
 
   render() {
     return <View style={styles.container}>
-        <MapView style={styles.map} showsUserLocation followsUserLocation loadingEnabled region={this.getMapRegion()} onLongPress={this.handlePress}>
+        <MapView 
+        ref={MapView =>(this.MapView= MapView)}
+        style={styles.map} 
+          showsUserLocation={true}
+         followsUserLocation={true} 
+         loadingEnabled={true}
+          region={this.getMapRegion()}
+          showsPointsOfInterest={false}
+          onLongPress={this.handlePress}>
           {this.currentPositionMarker()}
           <Polyline coordinates={this.state.routeCoordinates} strokeWidth={5} />
           {this.state.thaMarkersToRender}

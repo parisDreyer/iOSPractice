@@ -24,70 +24,76 @@ class Waypoint extends React.Component {
     constructor(props){
         super(props);
 
-        const { id, marker, deleteButtonAction } = this.props;
-        console.log('tha id: ', id)
+        const { marker, deleteButtonAction } = this.props;
         this.state = {
-            isShowingInfoButtons: false
+            isShowingInfoButtons: false,
+            marker: marker,
+            textContent: marker ? String(marker.id) : ""
         };
-        this.id = id;
+        this.id = marker.id;
         this.deleteButton = (() =>
             deleteButtonAction(this.id)).bind(this);
-        this.marker = marker;
+
+        if(this.state.marker) console.log("waypoint markercoord", JSON.stringify(this.state.marker.coordinate));
         this.toggleInfoButtons = this.toggleInfoButtons.bind(this);
     }
-    toggleInfoButtons(e){
-        if (!!e.stopPropagation) e.stopPropagation();
-        if (!!e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation();
+
+
+
+    async toggleInfoButtons(){//e){
+        //if (!!e.stopPropagation) e.stopPropagation();
+        //if (!!e.nativeEvent.stopImmediatePropagation) e.nativeEvent.stopImmediatePropagation();
         let isShowing = this.state.isShowingInfoButtons;
 
         if(isShowing){
             this.deleteButton();
+            this.setState({marker: null})
         }
 
 
         this.setState({
-            isShowingInfoButtons: !isShowing
+            isShowingInfoButtons: !isShowing,
+            textContent: !isShowing ? 
+                "delete" : 
+                this.marker ? String(this.marker.id) : ""
         });
     }
 
-    // infoButtons(){
-    //     return this.state.isShowingInfoButtons ? (
-    //             renderButton({
-    //                 name: 'delete', 
-    //                 onPressButton: this.deleteButton})
-    //     ) : null;
-    // }
+
+    refresh = () =>
+        this.toggleInfoButtons().then(() => this.forceUpdate());
+
+    
+
 
     render(){
-        // {...this.marker} 
-        // let info = this.infoButtons();
-        // const content = info ? info : <Text style={styles.text}>{this.marker.cost}</Text>;
-        const content = this.state.isShowingInfoButtons ? "delete" : this.marker.cost;
-        return <Marker 
-            key={this.id} 
-            coordinate={this.marker.coordinate}
+        return !!this.state.marker ? 
+             <Marker
+            key={this.key}
+            id={this.id}
+            coordinate={this.state.marker.coordinate}
             style={styles.marker}
-            title={content}
-            onCalloutPress={this.toggleInfoButtons}>
-                <Callout>
-                    <View>
-                        <Text>{content}</Text>
-                    </View>
-                </Callout>
-            </Marker>;
+            title={this.state.textContent}
+            onCalloutPress={this.refresh}/> : null;
     }
 }
 
-{/* </Marker>; */}
-{/*  <View style={styles.marker}>{content}</View> */}
 const renderLocations = ({ locations, deleteButtonAction }) =>
-  locations.map((marker, id) => (
-    <Waypoint
-        key={`userMarker_${id}`} 
-        id={id} 
-        marker={marker}
-        deleteButtonAction={deleteButtonAction}
-    />));
+    locations.map(m =>
+        <Marker
+            key={`userMarker_${m.id}`}
+            coordinate={m.coordinate}
+            style={styles.marker}
+            title={`${m.id}`}
+            onPress={() => deleteButtonAction(m.id)}
+        />)
+//   locations.map((m) => (!!m && !!m.coordinate?
+//     <Waypoint
+//         key={`userMarker_${m.id}`} 
+//         id={m.id} 
+//         marker={m}
+//         deleteButtonAction={deleteButtonAction}
+//     /> : null));
 
 
 const renderDistanceTravelled = ({distance}) => (
