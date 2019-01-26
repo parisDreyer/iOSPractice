@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { // react components for native view display+ui
-  Platform, View
+  Platform, View, Button
 } from 'react-native';
 import MapView, { Marker, AnimatedRegion, Polyline } from "react-native-maps";
 import styles from './css/styles'; // css json
@@ -30,9 +30,10 @@ class AnimatedMarkers extends React.Component {
       routeCoordinates: [],
       distanceTravelled: 0,
       prevLatLng: {},
+      isTrackingUser: false, // for tracking user location on map
       coordinate: new AnimatedRegion({
         latitude: LATITUDE,
-        longitude: LONGITUDE
+        longitude: LONGITUDE,
       }),
 
       // the actual markers that will be rendered
@@ -40,7 +41,13 @@ class AnimatedMarkers extends React.Component {
     };
     this.handlePress = this.handlePress.bind(this);
     this.deleteCoord = this.deleteCoord.bind(this);
+    this.toggleTrackingUser = this.toggleTrackingUser.bind(this);
   }
+
+  toggleTrackingUser() {
+    const isTracking = this.state.isTrackingUser;
+    this.setState({ isTrackingUser: !isTracking });
+}
 
   componentWillMount() {
     navigator.geolocation.getCurrentPosition(
@@ -64,6 +71,7 @@ class AnimatedMarkers extends React.Component {
           latitude,
           longitude
         };
+
 
         if (Platform.OS === "android") {
           if (this.marker) {
@@ -230,9 +238,9 @@ class AnimatedMarkers extends React.Component {
     return <View style={styles.container}>
         <MapView 
         ref={MapView =>(this.MapView= MapView)}
-        style={styles.map} 
+        style={styles.map}
           showsUserLocation={true}
-         followsUserLocation={true} 
+         followsUserLocation={this.state.isTrackingUser}
          loadingEnabled={true}
           region={this.getMapRegion()}
           showsPointsOfInterest={false}
@@ -243,7 +251,8 @@ class AnimatedMarkers extends React.Component {
           <Polyline coordinates={this.state.markers} strokeWidth={4} />
         </MapView>
         {renderDistanceTravelled({
-          distance: this.state.distanceTravelled
+          distance: this.state.distanceTravelled,
+          onBtnClick: () => this.toggleTrackingUser()
         })}
       </View>;
   }

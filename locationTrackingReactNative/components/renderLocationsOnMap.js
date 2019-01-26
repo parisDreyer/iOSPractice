@@ -86,19 +86,15 @@ const renderLocations = ({ locations, deleteButtonAction }) =>
             style={styles.marker}
             title={`${m.id}`}
             onPress={() => deleteButtonAction(m.id)}
-        />)
-//   locations.map((m) => (!!m && !!m.coordinate?
-//     <Waypoint
-//         key={`userMarker_${m.id}`} 
-//         id={m.id} 
-//         marker={m}
-//         deleteButtonAction={deleteButtonAction}
-//     /> : null));
+        />);
 
 
-const renderDistanceTravelled = ({distance}) => (
+const renderDistanceTravelled = ({distance, onBtnClick }) => (
     <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.bubble, styles.button]}>
+        <TouchableOpacity 
+            style={[styles.bubble, styles.button]}
+            onPress={onBtnClick}
+        >
             <Text style={styles.bottomBarContent}>
                 {parseFloat(distance).toFixed(2)} km
           </Text>
