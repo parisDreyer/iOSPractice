@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7F7-gb-gdJ">
-                                <rect key="frame" x="15" y="270" width="345" height="63"/>
+                                <rect key="frame" x="15" y="176" width="345" height="63"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <rect key="contentStretch" x="0.050000000000000003" y="0.0" width="1" height="1"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="42"/>
@@ -47,7 +47,7 @@
                             <accessibilityTraits key="traits" button="YES" allowsDirectInteraction="YES"/>
                         </accessibility>
                         <constraints>
-                            <constraint firstItem="7F7-gb-gdJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="250" id="4a1-s0-Q8Z"/>
+                            <constraint firstItem="7F7-gb-gdJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="156" id="4a1-s0-Q8Z"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="W23-7f-O28" secondAttribute="trailing" constant="15" id="7dX-Xb-DXT"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7F7-gb-gdJ" secondAttribute="trailing" constant="15" id="UHe-ht-M95"/>
                             <constraint firstItem="7F7-gb-gdJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="W2F-XQ-B0y"/>
@@ -64,7 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1750" y="-1451"/>
+            <point key="canvasLocation" x="-1751.2" y="-1451.4242878560722"/>
         </scene>
         <!--Settings Screen-->
         <scene sceneID="daj-XG-qaJ">
@@ -75,7 +75,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gAG-AH-asW">
-                                <rect key="frame" x="15" y="15" width="60" height="39"/>
+                                <rect key="frame" x="15" y="50" width="60" height="39"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <state key="normal" title="Back">
@@ -93,7 +93,7 @@
                         <constraints>
                             <constraint firstItem="gto-lz-xya" firstAttribute="trailing" secondItem="gAG-AH-asW" secondAttribute="trailing" constant="300" id="EO9-hI-IZm"/>
                             <constraint firstItem="gAG-AH-asW" firstAttribute="leading" secondItem="gto-lz-xya" secondAttribute="leading" constant="15" id="Op8-Lv-ff8"/>
-                            <constraint firstItem="gAG-AH-asW" firstAttribute="top" secondItem="t4e-uL-1ui" secondAttribute="top" constant="15" id="t1h-Hx-DeA"/>
+                            <constraint firstItem="gAG-AH-asW" firstAttribute="top" secondItem="t4e-uL-1ui" secondAttribute="top" constant="50" id="t1h-Hx-DeA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="gto-lz-xya"/>
                     </view>

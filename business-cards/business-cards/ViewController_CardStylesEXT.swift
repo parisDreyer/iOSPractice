@@ -33,8 +33,8 @@ class Data {
     }
 
     static func setBackgroundColor(context: UIViewController, r: Float, b: Float, g: Float, a: Float) {
-        let blackColor = UIColor(red: CGFloat(r/255.0), green: CGFloat(g/255.0), blue: CGFloat(b/255.0), alpha: 1.0)
-        context.view.backgroundColor = blackColor
+        let color = UIColor(red: CGFloat(r/255.0), green: CGFloat(g/255.0), blue: CGFloat(b/255.0), alpha: 1.0)
+        context.view.backgroundColor = color
     }
     static func buildMessage() -> String{
         var content = "<p>"
@@ -55,5 +55,12 @@ class Data {
         content += "</p>"
         return content
         //"<p><h1>Luke Dreyer</h1><ul><li>lukepdreyer@gmail.com</li><li>http://www.lukeparisdreyer.space</li><li>https://www.linkedin.com/in/lukepdreyer/</li><li>https://github.com/parisDreyer</li></ul></p>"
+    }
+    
+    static func generateQRCode(data: String) -> QRCodeView{
+        let frame = CGRect(origin: CGPoint(x: 56, y: 283), size: .init(width: 263, height: 263))
+        let view = QRCodeView(frame: frame)
+        view.generateCode(data)
+        return view
     }
 }

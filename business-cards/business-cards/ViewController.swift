@@ -14,6 +14,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var settingsSegueButton: UIButton!
     @IBOutlet weak var contactButton: UIButton!
+    
+    var contactInfo = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         let name = Data.getDefault(key: Data.TextFields[0])
@@ -22,6 +24,9 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
             settingsSegueButton.sendActions(for: .touchUpInside)
         } else {
             contactButton.setTitle(name, for: .normal)
+            contactInfo = Data.buildMessage()
+            let qrcode = Data.generateQRCode(data: contactInfo)
+            self.view.addSubview(qrcode)
         }
     }
   
@@ -45,7 +50,8 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
         mailComposerVC.setToRecipients([])
         let name = Data.getDefault(key: "name")
         mailComposerVC.setSubject("\(name) Would Like to Connect")
-        mailComposerVC.setMessageBody(Data.buildMessage(), isHTML: true)
+        if contactInfo.count == 0 { contactInfo = Data.buildMessage() }
+        mailComposerVC.setMessageBody(contactInfo, isHTML: true)
         
         return mailComposerVC
     }
