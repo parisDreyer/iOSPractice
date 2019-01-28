@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5615D3E521FC099400534CF1 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5615D3E421FC099400534CF1 /* SettingsViewController.swift */; };
+		5617760321FE2CAA009B8F35 /* QRScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5617760221FE2CAA009B8F35 /* QRScannerViewController.swift */; };
 		5619152121FCC6E8007348D0 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5619152021FCC6E8007348D0 /* QRCodeView.swift */; };
 		56A896E321FB96C4002CCC5F /* ViewController_CardStylesEXT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A896E221FB96C4002CCC5F /* ViewController_CardStylesEXT.swift */; };
 		56E9922A21FA9E01006C22A4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E9922921FA9E01006C22A4 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		5615D3E421FC099400534CF1 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		5617760221FE2CAA009B8F35 /* QRScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScannerViewController.swift; sourceTree = "<group>"; };
 		5619152021FCC6E8007348D0 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		56A896E221FB96C4002CCC5F /* ViewController_CardStylesEXT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController_CardStylesEXT.swift; sourceTree = "<group>"; };
 		56E9922621FA9E01006C22A4 /* business-cards.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "business-cards.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,6 +71,7 @@
 				56E9923521FA9E02006C22A4 /* Info.plist */,
 				56A896E221FB96C4002CCC5F /* ViewController_CardStylesEXT.swift */,
 				5619152021FCC6E8007348D0 /* QRCodeView.swift */,
+				5617760221FE2CAA009B8F35 /* QRScannerViewController.swift */,
 			);
 			path = "business-cards";
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			files = (
 				56E9922C21FA9E01006C22A4 /* ViewController.swift in Sources */,
 				56E9922A21FA9E01006C22A4 /* AppDelegate.swift in Sources */,
+				5617760321FE2CAA009B8F35 /* QRScannerViewController.swift in Sources */,
 				5619152121FCC6E8007348D0 /* QRCodeView.swift in Sources */,
 				56A896E321FB96C4002CCC5F /* ViewController_CardStylesEXT.swift in Sources */,
 				5615D3E521FC099400534CF1 /* SettingsViewController.swift in Sources */,

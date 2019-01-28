@@ -40,6 +40,17 @@
                                     <segue destination="b8I-nT-I3H" kind="show" identifier="settings" id="FyB-TV-9Nh"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ike-Nf-XK7">
+                                <rect key="frame" x="15" y="548" width="165" height="45"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <state key="normal" title="Scan QRCode">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="o2W-AG-PhI" kind="show" id="1cg-sU-fE1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -47,11 +58,14 @@
                             <accessibilityTraits key="traits" button="YES" allowsDirectInteraction="YES"/>
                         </accessibility>
                         <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ike-Nf-XK7" secondAttribute="bottom" constant="30" id="1MU-nq-ZRT"/>
                             <constraint firstItem="7F7-gb-gdJ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="156" id="4a1-s0-Q8Z"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="W23-7f-O28" secondAttribute="trailing" constant="15" id="7dX-Xb-DXT"/>
+                            <constraint firstItem="W23-7f-O28" firstAttribute="leading" secondItem="Ike-Nf-XK7" secondAttribute="trailing" constant="158" id="BQv-k8-XUV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7F7-gb-gdJ" secondAttribute="trailing" constant="15" id="UHe-ht-M95"/>
                             <constraint firstItem="7F7-gb-gdJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="W2F-XQ-B0y"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="W23-7f-O28" secondAttribute="bottom" constant="42" id="ggJ-4d-iTC"/>
+                            <constraint firstItem="Ike-Nf-XK7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="oa4-NY-6th"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -101,6 +115,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gcf-Wh-wch" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-762" y="-1451"/>
+        </scene>
+        <!--QR Scanner-->
+        <scene sceneID="n5G-6h-GrW">
+            <objects>
+                <viewController title="QR Scanner" id="o2W-AG-PhI" customClass="ScannerViewController" customModule="business_cards" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nTC-Mm-5wF">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="PRb-W8-fVf"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5It-hx-WRY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1751" y="-670"/>
         </scene>
     </scenes>
 </document>

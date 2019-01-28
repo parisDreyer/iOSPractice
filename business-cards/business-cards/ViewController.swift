@@ -16,6 +16,7 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var contactButton: UIButton!
     
     var contactInfo = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let name = Data.getDefault(key: Data.TextFields[0])
@@ -39,8 +40,6 @@ class ViewController: UIViewController, MFMailComposeViewControllerDelegate {
             self.showSendMailErrorAlert()
         }
     }
-    
-
     
     
     func configuredMailComposeViewController() -> MFMailComposeViewController {
