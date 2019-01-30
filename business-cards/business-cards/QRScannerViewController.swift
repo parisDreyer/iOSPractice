@@ -17,8 +17,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
-        
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
         
@@ -50,19 +48,19 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             return
         }
         
+        // prep video capture
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         
         
-        
-        
-        // draw green rect
+        // draw green rect ( to guide video capture )
         let half = self.view.frame.size.width / 2
         let qrt = half / 2
+        let eighth = qrt / 2
         let layer = CALayer()
-        layer.frame = CGRect(x: half - (qrt / 2), y: half, width: qrt, height: qrt);
+        layer.frame = CGRect(x: half - eighth, y: half + eighth, width: qrt, height: qrt);
         layer.borderWidth = 2
         layer.opacity = 1
         layer.backgroundColor = UIColor.clear.cgColor
@@ -71,7 +69,30 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         self.previewLayer = layer as? AVCaptureVideoPreviewLayer
         // end draw green rect
         
+        // backbutton if user wants to quit
+        let backButton = UIButton(type: .roundedRect) // if you want to set the type use like UIButton(type: .RoundedRect) or UIButton(type: .Custom)
+        backButton.setTitle("< back", for: .normal)
+        backButton.setTitleColor(UIColor.blue, for: .normal)
+        backButton.titleLabel?.minimumScaleFactor = 0.5;
+        backButton.titleLabel?.numberOfLines = 0;
+        backButton.titleLabel?.adjustsFontSizeToFitWidth = true;
+        backButton.backgroundColor = UIColor(red: 192.0/255.0, green: 192.0/255.0, blue: 192.0/255.0, alpha:0.2) // light silver bkgrnd
+        backButton.layer.cornerRadius = 5   // rounded borders
+        backButton.titleLabel?.font = backButton.titleLabel?.font.withSize(28)
+        backButton.frame = CGRect(x: 10, y: 15, width: 105, height: 65) // upper left
+        backButton.addTarget(self, action: #selector(backAction), for: .touchUpInside)
+        self.view.addSubview(backButton)
+        // end backbutton
+        
+        // do the camera
         captureSession.startRunning()
+    }
+    
+    // go back to main screen when back button is clicked
+    @objc func backAction() -> Void {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "Main") as! ViewController // value "Main" is set as StoryBoard_ID:Main in the Identity Section
+        self.present(nextViewController, animated:true, completion:nil)
     }
     
     func failed() {
@@ -86,7 +107,6 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         if (captureSession?.isRunning == false) {
             captureSession.startRunning()
-
         }
     }
     

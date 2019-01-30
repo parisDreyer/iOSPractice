@@ -13,7 +13,7 @@
         <!--Main Screen-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController title="Main Screen" id="BYZ-38-t0r" customClass="ViewController" customModule="business_cards" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Main" title="Main Screen" id="BYZ-38-t0r" customClass="ViewController" customModule="business_cards" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
