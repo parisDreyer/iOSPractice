@@ -16,6 +16,8 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        
         
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
@@ -53,6 +55,22 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         previewLayer.videoGravity = .resizeAspectFill
         view.layer.addSublayer(previewLayer)
         
+        
+        
+        
+        // draw green rect
+        let half = self.view.frame.size.width / 2
+        let qrt = half / 2
+        let layer = CALayer()
+        layer.frame = CGRect(x: half - (qrt / 2), y: half, width: qrt, height: qrt);
+        layer.borderWidth = 2
+        layer.opacity = 1
+        layer.backgroundColor = UIColor.clear.cgColor
+        layer.borderColor = UIColor.green.cgColor
+        self.view.layer.addSublayer(layer)
+        self.previewLayer = layer as? AVCaptureVideoPreviewLayer
+        // end draw green rect
+        
         captureSession.startRunning()
     }
     
@@ -68,8 +86,11 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
         
         if (captureSession?.isRunning == false) {
             captureSession.startRunning()
+
         }
     }
+    
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
