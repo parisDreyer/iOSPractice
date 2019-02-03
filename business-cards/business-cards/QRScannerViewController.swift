@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import UIKit
+import EventKit
 
 class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
@@ -127,15 +128,57 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let stringValue = readableObject.stringValue else { return }
             AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-            found(code: stringValue)
+            let max = stringValue.count - 1
+            let last = max > 16 || max < 8 ? max : 16
+            found(fn: String(stringValue.prefix(last)), code: stringValue)
         }
         
         dismiss(animated: true)
     }
     
-    func found(code: String) {
-        print(code)
+    func found(fn: String, code: String) {
+
+        // write to documents directory
+//        let path = getDocumentsDirectory().appendingPathComponent("test.txt")// /\(fn).txt")
+//        do {
+//            try code.write(to: path, atomically: true, encoding: .unicode)
+//        } catch {
+//            print("could not write to: \(path)")
+//        }
+        
+        let eventStore : EKEventStore = EKEventStore()
+        eventStore.requestAccess(to: .event, completion: { (granted, error) in
+            if granted && error == nil {
+                print("granted: \(granted)")
+                print("error: \(String(describing: error))")
+                
+                let event = EKEvent(eventStore: eventStore)
+                event.title = "call networking associate"
+                let morningOfToday = Calendar.current.date(bySetting: .hour, value: 8, of:  Date())
+                let eveningOfToday = Calendar.current.date(bySetting: .hour, value: 16, of:  Date())
+                event.startDate = Calendar.current.date(byAdding: .day, value: 1, to: morningOfToday!)!
+                event.endDate = Calendar.current.date(byAdding: .day, value: 1, to: eveningOfToday!)!
+                event.notes = code
+                event.calendar = eventStore.defaultCalendarForNewEvents
+                do {
+                    try eventStore.save(event, span: .thisEvent)
+                } catch let error as NSError {
+                    print("failed to save event with error : \(error)")
+                }
+                print("Saved Event")
+            }else{
+                
+                print("failed to save event with error : \(String(describing: error)) or access not granted")
+            }
+        })
     }
+    
+    
+// get file for documentdirectory
+//    func getDocumentsDirectory() -> URL {
+//        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+//        return paths[0]
+//    }
     
     override var prefersStatusBarHidden: Bool {
         return true
